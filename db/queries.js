@@ -30,4 +30,25 @@ async function findUserByCredentials(credentials) {
   return null;
 }
 
-export { getAllEvents, getEventById, createUser, findUserByCredentials };
+async function updateInterested(eventId, userId) {
+  const event = await eventModel.findById(eventId);
+  if (event) {
+    const foundUser = event.interested_ids.find(
+      (id) => id.toString() === userId
+    );
+    if (foundUser) {
+      event.interested_ids.pull(userId);
+    } else {
+      event.interested_ids.push(userId);
+    }
+    event.save();
+  }
+}
+
+export {
+  getAllEvents,
+  getEventById,
+  createUser,
+  findUserByCredentials,
+  updateInterested,
+};
