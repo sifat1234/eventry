@@ -1,5 +1,6 @@
 import EventCard from './EventCard';
 import { getAllEvents } from '@/db/queries';
+
 export default async function EventList() {
   const events = await getAllEvents();
 

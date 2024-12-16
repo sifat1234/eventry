@@ -1,5 +1,6 @@
 import { eventModel } from '@/models/event-models';
 import { userModel } from '@/models/user-model';
+import mongoose from 'mongoose';
 
 import {
   replaceMongoIdInArray,
@@ -45,10 +46,19 @@ async function updateInterested(eventId, userId) {
   }
 }
 
+async function updateGoing(eventId, userId) {
+  const event = await eventModel.findById(eventId);
+
+  event.going_ids.push(userId);
+
+  event.save();
+}
+
 export {
   getAllEvents,
   getEventById,
   createUser,
   findUserByCredentials,
   updateInterested,
+  updateGoing,
 };

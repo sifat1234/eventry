@@ -1,7 +1,12 @@
 'use server';
 
 import { createUser } from '@/db/queries';
-import { findUserByCredentials, updateInterested } from '@/db/queries';
+import {
+  findUserByCredentials,
+  updateInterested,
+  updateGoing,
+} from '@/db/queries';
+
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
@@ -36,4 +41,15 @@ async function addInterestedEvent(eventId, userId) {
   revalidatePath('/');
 }
 
-export { registerUser, loginUser, addInterestedEvent };
+async function addGoingEvent(eventId, user) {
+  try {
+    await updateGoing(eventId, user?.id);
+  } catch (err) {
+    throw err;
+  }
+
+  revalidatePath('/');
+  redirect('/');
+}
+
+export { registerUser, loginUser, addInterestedEvent, addGoingEvent };

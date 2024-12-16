@@ -5,13 +5,19 @@ import { addInterestedEvent } from '@/app/actions';
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-const ActionButtons = ({ eventId, interestedUserIds, fromDetails }) => {
+const ActionButtons = ({
+  eventId,
+  interestedUserIds,
+  goingUserIds,
+  fromDetails,
+}) => {
   const { auth } = useAuth();
-  console.log(auth);
 
   const isInterested = interestedUserIds.find((id) => id === auth?.id);
+  const isGoing = goingUserIds.find((id) => id === auth?.id);
 
   const [interested, setInterested] = useState(isInterested);
+  const [going, setGoing] = useState(isGoing);
 
   const [isPending, startTransition] = useTransition();
 
@@ -32,7 +38,7 @@ const ActionButtons = ({ eventId, interestedUserIds, fromDetails }) => {
     if (!auth) {
       router.push('/login');
     } else {
-      router.push('/payment');
+      router.push(`/payment/${eventId}`);
     }
   };
 
@@ -47,6 +53,7 @@ const ActionButtons = ({ eventId, interestedUserIds, fromDetails }) => {
         Interested
       </button>
       <button
+        disabled={auth && going}
         onClick={markGoing}
         className=' text-center w-full bg-[#464849] py-2 px-2 rounded-md border border-[#5F5F5F]/50 shadow-sm cursor-pointer hover:bg-[#3C3D3D] transition-colors active:translate-y-1'
       >
